@@ -59,7 +59,35 @@ function App() {
         });
       });
   };
+  const handleArchiveEvent = async (id: string) => {
+    const eventToArchive = events.find(event => event.id === id);
+    if (!eventToArchive) return;
+    axios.put(`${backUrl}/${id}`, {archived: true})
+    .then(response =>{
+      console.log('Event archived:', response.data);
+      Swal.fire({
+        title: 'Archived',
+        text: 'Event archived successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
+      setEvents(events.map(event => 
+        event.id === id ? { ...event, archived: true } : event
+        
+      ));
 
+    
+  }).catch(error => {
+    console.log(error);
+    Swal.fire({
+      title: 'Error',
+      text: 'Failed to archive event.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+  });
+
+  }
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-8">Event Scheduler</h1>
@@ -71,7 +99,7 @@ function App() {
             {event.category && <p className="text-sm text-gray-400">Category: {event.category}</p>}
             <div className="flex justify-between mt-2">
               <button onClick={() => handleDeleteEvent(event.id)} className='bg-red-500 text-white hover:cursor-pointer px-2 py-1 rounded hover:bg-red-600'>Delete</button>
-              <button className={`px-2 py-1 rounded hover:cursor-pointer ${event.archived ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}>Archive</button>
+              <button onClick={() => handleArchiveEvent(event.id)} className={`px-2 py-1 rounded hover:cursor-pointer ${event.archived ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}>Archive</button>
             </div>
           </div>
         ))}
@@ -82,4 +110,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
