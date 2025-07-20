@@ -3,7 +3,8 @@ import './App.css'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 interface Event {
-  id: string;
+  id?: string;
+  _id?: string;
   title: string;
   date: string;
   time: string;
@@ -41,7 +42,7 @@ function App() {
     axios.delete(`${backUrl}/${id}`)
       .then(response => {
         console.log('Event deleted:', response.data);
-        setEvents(events.filter(event => event.id !== id));
+        setEvents(events.filter(event => (event.id || event._id) !== id));
         Swal.fire({
           title: 'Deleted',
           text: 'Event deleted successfully!',
@@ -60,7 +61,7 @@ function App() {
       });
   };
   const handleArchiveEvent = async (id: string) => {
-    const eventToArchive = events.find(event => event.id === id);
+    const eventToArchive = events.find(event => (event.id || event._id) === id);
     if (!eventToArchive) return;
     axios.put(`${backUrl}/${id}`, {archived: true})
     .then(response =>{
@@ -72,7 +73,7 @@ function App() {
         confirmButtonText: 'OK'
       });
       setEvents(events.map(event => 
-        event.id === id ? { ...event, archived: true } : event
+        (event.id || event._id) === id ? { ...event, archived: true } : event
         
       ));
 
@@ -90,16 +91,22 @@ function App() {
   }
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-8">Event Scheduler</h1>
+      <h1 className="text-2xl font-bold mb-8">Mini Event Scheduler</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {events.map(event => (
-          <div key={event.id} className={`mb-2  p-5 space-y-1 rounded-md hover:shadow-md shadow-blue-400 hover:ease-in-out border-2 border-blue-300 duration-300 ${event.archived ? 'opacity-50' : ''}`}>
+          <div key={event.id || event._id} className={`mb-2  p-5 space-y-1 rounded-md hover:shadow-md shadow-blue-400 hover:ease-in-out border-2 border-blue-300 duration-300 ${event.archived ? 'opacity-50' : ''}`}>
             <h1 className='text-2xl font-semibold text-green-400'>{event.title}</h1>{event.date} at {event.time}
             {event.notes && <p className="text-sm text-gray-400">Notes: {event.notes}</p>}
             {event.category && <p className="text-sm text-gray-400">Category: {event.category}</p>}
             <div className="flex justify-between mt-2">
-              <button onClick={() => handleDeleteEvent(event.id)} className='bg-red-500 text-white hover:cursor-pointer px-2 py-1 rounded hover:bg-red-600'>Delete</button>
-              <button onClick={() => handleArchiveEvent(event.id)} className={`px-2 py-1 rounded hover:cursor-pointer ${event.archived ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}>Archive</button>
+              <button onClick={() => handleDeleteEvent(event.id || event._id!)} className='bg-red-500 text-white hover:cursor-pointer px-2 py-1 rounded hover:bg-red-600'>Delete</button>
+              <button 
+                onClick={() => handleArchiveEvent(event.id || event._id!)} 
+                disabled={event.archived}
+                className={`px-2 py-1 rounded text-white ${event.archived ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 hover:cursor-pointer'}`}
+              >
+                {event.archived ? 'Archived' : 'Archive'}
+              </button>
             </div>
           </div>
         ))}

@@ -44,7 +44,7 @@ const EventForm = () => {
         <div className='p-4 mt-12 border-2 border-blue-300 rounded-md shadow-md hover:shadow-blue-400 hover:ease-in-out duration-300'>
             <form onSubmit={handleSubmit}>
                 <input className='border border-gray-300 rounded p-2' type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
-                <input className='border border-gray-300 mx-4 rounded p-2' type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                <input className='border border-gray-300 mx-4 rounded p-2 my-3 md:py-0 lg:py-0' type="date" value={date} onChange={(e) => setDate(e.target.value)} />
                 <input className='border border-gray-300 rounded p-2' type="time" value={time} onChange={(e) => setTime(e.target.value)} />
                 <br /> <br />
                 <textarea className='border border-gray-300 rounded p-2' value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Notes"></textarea>
