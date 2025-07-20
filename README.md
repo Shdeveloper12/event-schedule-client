@@ -12,6 +12,9 @@
 ## Live Link
 * https://event-scheduler2.netlify.app
 
+## Server Repository Link
+* https://github.com/Shdeveloper12/event-schedule-server
+
 ## For API Testing
 * https://event-scheduler-server-omega.vercel.app/events
 
