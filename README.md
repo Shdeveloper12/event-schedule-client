@@ -9,6 +9,8 @@
 * <p>Integrated responsive feature for a better UX/UI experience.</p>
 
 
+## Live Link
+* https://event-scheduler2.netlify.app
 
 ## For API Testing
 * https://event-scheduler-server-omega.vercel.app/events
