@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css'
+import axios from 'axios';
+import Swal from 'sweetalert2';
 interface Event {
   id: string;
   title: string;
@@ -36,17 +38,26 @@ function App() {
   }, []);
 
   const handleDeleteEvent = async (id: string) => {
-    try {
-      const response = await fetch(`${backUrl}/${id}`, {
-        method: 'DELETE',
+    axios.delete(`${backUrl}/${id}`)
+      .then(response => {
+        console.log('Event deleted:', response.data);
+        setEvents(events.filter(event => event.id !== id));
+        Swal.fire({
+          title: 'Deleted',
+          text: 'Event deleted successfully!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      })
+      .catch(error => {
+        console.error('Error deleting event:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to delete event.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      setEvents(events.filter(event => event.id !== id));
-    } catch (error) {
-      console.error('Error deleting event:', error);
-    }
   };
 
   return (
