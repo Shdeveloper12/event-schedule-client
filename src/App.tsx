@@ -15,7 +15,7 @@ interface Event {
 
 function App() {
   const [events, setEvents] = useState<Event[]>([]);
-  const backUrl = 'http://localhost:5000/events';
+  const backUrl = 'https://event-scheduler-server-omega.vercel.app/events';
 
   useEffect(() => {
     const fetchData = async () => {

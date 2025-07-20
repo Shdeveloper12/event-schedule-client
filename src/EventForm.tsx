@@ -25,7 +25,7 @@ const EventForm = () => {
             time,
             notes
         };
-        axios.post('http://localhost:5000/events', eventData)
+        axios.post('https://event-scheduler-server-omega.vercel.app/events', eventData)
             .then(response => {
                 console.log('Event created:', response.data);
                 Swal.fire({
